@@ -1,0 +1,10 @@
+firstName,lastName,email,company,position,salary
+Tomasz,Adamiak,tomek.adamiak@techcorp.pl,TechCorp,MANAGER,12000
+Kasia,Wójcik,kasia.wojcik@softltd.pl,SoftLtd,PROGRAMMER,8000
+Marta,Zając,marta.zajac@softltd.pl,SoftLtd,CEO,25000
+Krzysztof,Lis,krzys.lis@global.pl,GlobalTech,VICECEO,18000
+Adam,Pajak,adam.pajak@techcorp.pl,TechCorp,INTERN,3000
+Jan,Kowalski,jan.kowalski@techcorp.pl,TechCorp,PROGRAMMER,8000
+Bledny,Rekord,blad1@test.pl,TestCo,TEST,5000
+Nieprawidlowa,Pensja,blad2@test.pl,TestCo,MANAGER,ABC
+Duplikat,Email,tomek.adamiak@techcorp.pl,TechCorp,PROGRAMMER,8000
