@@ -17,8 +17,17 @@ public class ApiService {
     private static final String API_URL = "https://jsonplaceholder.typicode.com/users";
     private static final Position DEFAULT_POSITION = Position.PROGRAMMER;
 
+    private final HttpClient client;
+
+    public ApiService() {
+        this.client = HttpClient.newHttpClient();
+    }
+
+    public ApiService(HttpClient client) {
+        this.client = client;
+    }
+
     public List<Employee> fetchEmployeesFromApi() throws ApiException {
-        HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(API_URL))
                 .GET()

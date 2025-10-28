@@ -1,0 +1,171 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Main</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.example</a>
+</div>
+
+<h1>Coverage Summary for Class: Main (org.example)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Main</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/3)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/38)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.example;
+&nbsp;
+&nbsp;import java.util.Optional;
+&nbsp;import org.example.exception.ApiException;
+&nbsp;import org.example.model.*;
+&nbsp;import org.example.service.*;
+&nbsp;
+<b class="nc">&nbsp;public class Main {</b>
+&nbsp;    public static void main(String[] args) {
+<b class="nc">&nbsp;        EmployeeService manager = new EmployeeService();</b>
+<b class="nc">&nbsp;        ImportService importService = new ImportService(manager);</b>
+<b class="nc">&nbsp;        ApiService apiService = new ApiService();</b>
+&nbsp;
+&nbsp;        // Dodawanie danych początkowych (Zadanie 1)
+<b class="nc">&nbsp;        manager.addEmployee(new Employee(&quot;Anna&quot;, &quot;Kowalska&quot;, &quot;anna@tc.com&quot;, &quot;TechCorp&quot;, Position.CEO));</b>
+<b class="nc">&nbsp;        manager.addEmployee(new Employee(&quot;Piotr&quot;, &quot;Nowak&quot;, &quot;piotr@tc.com&quot;, &quot;TechCorp&quot;, Position.PROGRAMMER));</b>
+<b class="nc">&nbsp;        manager.addEmployee(new Employee(&quot;Janusz&quot;, &quot;Kruk&quot;, &quot;janusz@ds.com&quot;, &quot;DataSoft&quot;, Position.MANAGER));</b>
+<b class="nc">&nbsp;        manager.addEmployee(new Employee(&quot;Adam&quot;, &quot;Zyś&quot;, &quot;adam@tc.com&quot;, &quot;TechCorp&quot;, Position.PROGRAMMER));</b>
+<b class="nc">&nbsp;        manager.addEmployee(new Employee(&quot;Ewa&quot;, &quot;Lis&quot;, &quot;ewa@tc.com&quot;, &quot;TechCorp&quot;, Position.INTERN));</b>
+<b class="nc">&nbsp;        manager.addEmployee(new Employee(&quot;Test&quot;, &quot;Duplikat&quot;, &quot;anna@tc.com&quot;, &quot;TechCorp&quot;, Position.INTERN));</b>
+&nbsp;
+<b class="nc">&nbsp;        System.out.println(&quot;--- BAZOWE OPERACJE ---&quot;);</b>
+<b class="nc">&nbsp;        manager.getAllEmployees().forEach(System.out::println);</b>
+&nbsp;
+<b class="nc">&nbsp;        System.out.println(&quot;\n--- Filtr TechCorp ---&quot;);</b>
+<b class="nc">&nbsp;        manager.filterByCompany(&quot;TechCorp&quot;).forEach(System.out::println);</b>
+<b class="nc">&nbsp;        System.out.println(&quot;\n--- Sortowanie po nazwisku ---&quot;);</b>
+<b class="nc">&nbsp;        manager.sortByLastName().forEach(System.out::println);</b>
+&nbsp;
+<b class="nc">&nbsp;        System.out.println(&quot;\n--- Statystyki ---&quot;);</b>
+<b class="nc">&nbsp;        manager.countEmployeesByPosition().forEach((pos, count) -&gt; System.out.printf(&quot;%s: %d%n&quot;, pos.getName(), count));</b>
+<b class="nc">&nbsp;        System.out.printf(&quot;Średnie wynagrodzenie: %.2f PLN%n&quot;, manager.calculateAverageSalary());</b>
+<b class="nc">&nbsp;        Optional&lt;Employee&gt; highestPaid = manager.getHighestPaidEmployee();</b>
+<b class="nc">&nbsp;        highestPaid.ifPresent(e -&gt; System.out.println(&quot;Najlepiej opłacany: &quot; + e.getFullName()));</b>
+&nbsp;
+<b class="nc">&nbsp;        System.out.println(&quot;\n=======================================&quot;);</b>
+&nbsp;
+&nbsp;        // Import CSV (Zadanie 2)
+<b class="nc">&nbsp;        System.out.println(&quot;--- IMPORT CSV ---&quot;);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            ImportSummary summary = importService.importFromCsv(&quot;employees.csv&quot;);</b>
+<b class="nc">&nbsp;            System.out.println(summary);</b>
+<b class="nc">&nbsp;            System.out.printf(&quot;Pracowników po CSV: %d%n&quot;, manager.getAllEmployees().size());</b>
+&nbsp;        } catch (Exception e) {
+<b class="nc">&nbsp;            System.err.printf(&quot;Błąd CSV: %s%n&quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Integracja z REST API (Zadanie 2)
+<b class="nc">&nbsp;        System.out.println(&quot;\n--- INTEGRACJA API ---&quot;);</b>
+&nbsp;        try {
+<b class="nc">&nbsp;            apiService.fetchEmployeesFromApi().forEach(manager::addEmployee);</b>
+<b class="nc">&nbsp;            System.out.printf(&quot;Pracowników po API: %d%n&quot;, manager.getAllEmployees().size());</b>
+&nbsp;        } catch (ApiException e) {
+<b class="nc">&nbsp;            System.err.printf(&quot;Błąd API: %s%n&quot;, e.getMessage());</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Analityka rozszerzona (Zadanie 2)
+<b class="nc">&nbsp;        System.out.println(&quot;\n--- ANALITYKA FIRMOWA ---&quot;);</b>
+<b class="nc">&nbsp;        manager.validateSalaryConsistency()</b>
+<b class="nc">&nbsp;                .forEach(e -&gt; System.out.println(&quot;Niespójna pensja: &quot; + e));</b>
+&nbsp;
+<b class="nc">&nbsp;        System.out.println(&quot;\n--- Statystyki Firm ---&quot;);</b>
+<b class="nc">&nbsp;        manager.getCompanyStatistics()</b>
+<b class="nc">&nbsp;                .forEach((company, stats) -&gt;</b>
+<b class="nc">&nbsp;                        System.out.printf(&quot;Firma &#39;%s&#39;: %s%n&quot;, company, stats));</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-22 18:12</div>
+</div>
+</body>
+</html>

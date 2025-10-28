@@ -1,0 +1,176 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Employee</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.example.model</a>
+</div>
+
+<h1>Coverage Summary for Class: Employee (org.example.model)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Employee</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (9/11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    16.7%
+  </span>
+  <span class="absValue">
+    (1/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    71.4%
+  </span>
+  <span class="absValue">
+    (15/21)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.example.model;
+&nbsp;
+&nbsp;public class Employee {
+&nbsp;    private String firstName;
+&nbsp;    private String lastName;
+&nbsp;    private String email;
+&nbsp;    private String company;
+&nbsp;    private Position position;
+&nbsp;    private double salary;
+&nbsp;
+<b class="fc">&nbsp;    public Employee(String firstName, String lastName, String email, String company, Position position) {</b>
+<b class="fc">&nbsp;        this.firstName = firstName;</b>
+<b class="fc">&nbsp;        this.lastName = lastName;</b>
+<b class="fc">&nbsp;        this.email = email;</b>
+<b class="fc">&nbsp;        this.company = company;</b>
+<b class="fc">&nbsp;        this.position = position;</b>
+<b class="fc">&nbsp;        this.salary = this.position.getSalary();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getFirstName() {
+<b class="fc">&nbsp;        return this.firstName;</b>
+&nbsp;    }
+&nbsp;    public String getLastName() {
+<b class="fc">&nbsp;        return this.lastName;</b>
+&nbsp;    }
+&nbsp;    public String getFullName() {
+<b class="fc">&nbsp;        return this.firstName + &quot; &quot; + this.lastName;</b>
+&nbsp;    }
+&nbsp;    public String getEmail() {
+<b class="fc">&nbsp;        return this.email;</b>
+&nbsp;    }
+&nbsp;    public String getCompany() {
+<b class="fc">&nbsp;        return this.company;</b>
+&nbsp;    }
+&nbsp;    public Position getPosition() {
+<b class="fc">&nbsp;        return this.position;</b>
+&nbsp;    }
+&nbsp;    public double getSalary() {
+<b class="fc">&nbsp;        return this.salary;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public boolean equals(Object o) {
+<b class="pc">&nbsp;        if (this == o) return true;</b>
+<b class="nc">&nbsp;        if (o == null || getClass() != o.getClass()) return false;</b>
+<b class="nc">&nbsp;        Employee employee = (Employee) o;</b>
+<b class="nc">&nbsp;        return email.equalsIgnoreCase(employee.email);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int hashCode(){
+<b class="nc">&nbsp;        return (this.getEmail()).toLowerCase().hashCode();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="nc">&nbsp;        return String.format(&quot;Employee{name=&#39;%s&#39;, email=&#39;%s&#39;, position=%s, salary=%.2f, company=%s}&quot;,</b>
+<b class="nc">&nbsp;                this.getFullName(), this.getEmail(), this.getPosition().getName(), this.getSalary(), this.getCompany());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-22 18:12</div>
+</div>
+</body>
+</html>

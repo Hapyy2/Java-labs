@@ -1,0 +1,217 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > EmployeeService</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">org.example.service</a>
+</div>
+
+<h1>Coverage Summary for Class: EmployeeService (org.example.service)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">EmployeeService</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (11/12)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    75%
+  </span>
+  <span class="absValue">
+    (3/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    93.9%
+  </span>
+  <span class="absValue">
+    (46/49)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package org.example.service;
+&nbsp;
+&nbsp;import org.example.model.Position;
+&nbsp;import org.example.model.Employee;
+&nbsp;import org.example.model.CompanyStatistics;
+&nbsp;import java.util.*;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+<b class="fc">&nbsp;public class EmployeeService {</b>
+<b class="fc">&nbsp;    private final List&lt;Employee&gt; employees = new ArrayList&lt;&gt;();</b>
+&nbsp;
+&nbsp;    public boolean addEmployee(Employee employee) {
+<b class="fc">&nbsp;        boolean emailExists = employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .anyMatch(e -&gt; e.getEmail().equalsIgnoreCase(employee.getEmail()));</b>
+&nbsp;
+<b class="fc">&nbsp;        if (emailExists) {</b>
+<b class="fc">&nbsp;            return false;</b>
+&nbsp;        }
+<b class="fc">&nbsp;        employees.add(employee);</b>
+<b class="fc">&nbsp;        return true;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Employee&gt; getAllEmployees() {
+<b class="fc">&nbsp;        return new ArrayList&lt;&gt;(employees);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Employee&gt; filterByCompany(String companyName) {
+<b class="fc">&nbsp;        return employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .filter(e -&gt; e.getCompany().equalsIgnoreCase(companyName))</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Employee&gt; sortByLastName() {
+<b class="fc">&nbsp;        return employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .sorted(Comparator.comparing(Employee::getLastName))</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Position, List&lt;Employee&gt;&gt; groupByPosition() {
+<b class="nc">&nbsp;        return employees.stream()</b>
+<b class="nc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="nc">&nbsp;                .collect(Collectors.groupingBy(Employee::getPosition));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;Position, Long&gt; countEmployeesByPosition() {
+<b class="fc">&nbsp;        return employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .collect(Collectors.groupingBy(</b>
+&nbsp;                        Employee::getPosition,
+<b class="fc">&nbsp;                        Collectors.counting()</b>
+&nbsp;                ));
+&nbsp;    }
+&nbsp;
+&nbsp;    public double calculateAverageSalary() {
+<b class="fc">&nbsp;        return employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .mapToDouble(Employee::getSalary)</b>
+<b class="fc">&nbsp;                .average()</b>
+<b class="fc">&nbsp;                .orElse(0.0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Optional&lt;Employee&gt; getHighestPaidEmployee() {
+<b class="fc">&nbsp;        return employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .max(Comparator.comparingDouble(Employee::getSalary));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // === Metody z Zadania 2 ===
+&nbsp;
+&nbsp;    public List&lt;Employee&gt; validateSalaryConsistency() {
+<b class="fc">&nbsp;        return employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="pc">&nbsp;                .filter(e -&gt; e.getSalary() &lt; e.getPosition().getSalary())</b>
+<b class="fc">&nbsp;                .collect(Collectors.toList());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Map&lt;String, CompanyStatistics&gt; getCompanyStatistics() {
+<b class="fc">&nbsp;        return employees.stream()</b>
+<b class="fc">&nbsp;                .filter(Objects::nonNull)</b>
+<b class="fc">&nbsp;                .collect(Collectors.groupingBy(</b>
+&nbsp;                        Employee::getCompany,
+<b class="fc">&nbsp;                        Collectors.collectingAndThen(</b>
+<b class="fc">&nbsp;                                Collectors.toList(),</b>
+&nbsp;                                list -&gt; {
+<b class="fc">&nbsp;                                    long count = list.size();</b>
+<b class="fc">&nbsp;                                    double avgSalary = list.stream().mapToDouble(Employee::getSalary).average().orElse(0.0);</b>
+&nbsp;
+<b class="fc">&nbsp;                                    String highestPaidName = list.stream()</b>
+<b class="fc">&nbsp;                                            .max(Comparator.comparingDouble(Employee::getSalary))</b>
+<b class="fc">&nbsp;                                            .map(Employee::getFullName)</b>
+<b class="fc">&nbsp;                                            .orElse(&quot;Brak&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                                    return new CompanyStatistics(count, avgSalary, highestPaidName);</b>
+&nbsp;                                }
+&nbsp;                        )
+&nbsp;                ));
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2025-10-22 18:12</div>
+</div>
+</body>
+</html>
