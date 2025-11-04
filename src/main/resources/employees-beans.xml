@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+           http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util.xsd">
+
+    <bean id="employee1" class="org.example.model.Employee">
+        <constructor-arg value="Jan"/>
+        <constructor-arg value="Kowalski"/>
+        <constructor-arg value="jan.kowalski@techcorp.com"/>
+        <constructor-arg value="TechCorp"/>
+        <constructor-arg value="MANAGER"/>
+        <constructor-arg value="12500"/>
+    </bean>
+
+    <bean id="employee2" class="org.example.model.Employee">
+        <constructor-arg value="Anna"/>
+        <constructor-arg value="Nowak"/>
+        <constructor-arg value="anna.nowak@techcorp.com"/>
+        <constructor-arg value="TechCorp"/>
+        <constructor-arg value="PROGRAMMER"/>
+        <constructor-arg value="8500"/>
+    </bean>
+
+    <util:list id="xmlEmployees" value-type="org.example.model.Employee">
+        <ref bean="employee1"/>
+        <ref bean="employee2"/>
+    </util:list>
+</beans>
+

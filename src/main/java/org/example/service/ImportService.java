@@ -4,6 +4,8 @@ import org.example.exception.InvalidDataException;
 import org.example.model.Employee;
 import org.example.model.ImportSummary;
 import org.example.model.Position;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,19 +13,23 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ImportService {
     private final EmployeeService employeeService;
+    private final String csvFilePath;
 
-    public ImportService(EmployeeService employeeService) {
+    public ImportService(EmployeeService employeeService,
+                         @Value("${app.import.csv-file}") String csvFilePath) {
         this.employeeService = employeeService;
+        this.csvFilePath = csvFilePath;
     }
 
-    public ImportSummary importFromCsv(String filePath) throws IOException {
+    public ImportSummary importFromCsv() throws IOException {
         int importedCount = 0;
         List<String> errors = new ArrayList<>();
         int lineNumber = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
             if (br.readLine() != null) {
                 lineNumber++;
             }
@@ -59,7 +65,15 @@ public class ImportService {
                         throw new InvalidDataException("Wynagrodzenie musi być dodatnie: " + salaryFromCsv);
                     }
 
-                    Employee employee = new Employee(firstName, lastName, email, company, position);
+                    Employee employee = new Employee(firstName, lastName, email, company, position, salaryFromCsv);
+
+                    if (employee.getSalary() < employee.getPosition().getSalary()) {
+                        errors.add(String.format(
+                                "Linia %d: Ostrzeżenie - pensja (%.2f) niższa niż bazowa (%.2f) dla %s. Pracownik dodany.",
+                                lineNumber, employee.getSalary(), employee.getPosition().getSalary(), positionName
+                        ));
+                    }
+
 
                     if (employeeService.addEmployee(employee)) {
                         importedCount++;

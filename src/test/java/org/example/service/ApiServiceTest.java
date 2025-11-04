@@ -1,7 +1,9 @@
 package org.example.service;
 
+import com.google.gson.Gson;
 import org.example.exception.ApiException;
 import org.example.model.Employee;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,26 +29,31 @@ class ApiServiceTest {
     @Mock
     private HttpResponse<String> mockHttpResponse;
 
+    private ApiService apiService;
+
+    @BeforeEach
+    void setUp() {
+        apiService = new ApiService(mockHttpClient, new Gson(), "http://test-api.url");
+    }
+
     @Test
     @DisplayName("Should fetch and parse employees when API returns 200 OK")
     void fetchEmployeesFromApi_shouldSucceed_on200OK() throws IOException, InterruptedException, ApiException {
         String jsonResponse = """
-            [
-              {
-                "id": 1,
-                "name": "Leanne Graham",
-                "email": "Sincere@april.biz",
-                "company": { "name": "Romaguera-Crona" }
-              }
-            ]
-            """;
+                [
+                  {
+                    "id": 1,
+                    "name": "Leanne Graham",
+                    "email": "Sincere@april.biz",
+                    "company": { "name": "Romaguera-Crona" }
+                  }
+                ]
+                """;
 
         when(mockHttpResponse.statusCode()).thenReturn(200);
         when(mockHttpResponse.body()).thenReturn(jsonResponse);
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenReturn(mockHttpResponse);
-
-        ApiService apiService = new ApiService(mockHttpClient);
 
         List<Employee> employees = apiService.fetchEmployeesFromApi();
 
@@ -66,7 +73,6 @@ class ApiServiceTest {
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenReturn(mockHttpResponse);
 
-        ApiService apiService = new ApiService(mockHttpClient);
 
         ApiException exception = assertThrows(ApiException.class, apiService::fetchEmployeesFromApi);
         assertEquals("Błąd HTTP: Status 500", exception.getMessage());
@@ -78,9 +84,9 @@ class ApiServiceTest {
         when(mockHttpClient.send(any(HttpRequest.class), any(HttpResponse.BodyHandler.class)))
                 .thenThrow(new IOException("Connection failed"));
 
-        ApiService apiService = new ApiService(mockHttpClient);
 
         ApiException exception = assertThrows(ApiException.class, apiService::fetchEmployeesFromApi);
         assertEquals("Błąd komunikacji z API.", exception.getMessage());
     }
 }
+

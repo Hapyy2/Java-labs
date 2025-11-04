@@ -3,9 +3,12 @@ package org.example.service;
 import org.example.model.Position;
 import org.example.model.Employee;
 import org.example.model.CompanyStatistics;
+import org.springframework.stereotype.Service;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class EmployeeService {
     private final List<Employee> employees = new ArrayList<>();
 
@@ -67,8 +70,6 @@ public class EmployeeService {
                 .filter(Objects::nonNull)
                 .max(Comparator.comparingDouble(Employee::getSalary));
     }
-
-    // === Metody z Zadania 2 ===
 
     public List<Employee> validateSalaryConsistency() {
         return employees.stream()

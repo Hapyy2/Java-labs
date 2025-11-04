@@ -4,6 +4,8 @@ import com.google.gson.*;
 import org.example.exception.ApiException;
 import org.example.model.Employee;
 import org.example.model.Position;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.URI;
@@ -13,23 +15,24 @@ import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ApiService {
-    private static final String API_URL = "https://jsonplaceholder.typicode.com/users";
+
     private static final Position DEFAULT_POSITION = Position.PROGRAMMER;
 
     private final HttpClient client;
+    private final Gson gson;
+    private final String apiUrl;
 
-    public ApiService() {
-        this.client = HttpClient.newHttpClient();
-    }
-
-    public ApiService(HttpClient client) {
+    public ApiService(HttpClient client, Gson gson, @Value("${app.api.url}") String apiUrl) {
         this.client = client;
+        this.gson = gson;
+        this.apiUrl = apiUrl;
     }
 
     public List<Employee> fetchEmployeesFromApi() throws ApiException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(API_URL))
+                .uri(URI.create(apiUrl))
                 .GET()
                 .build();
 
@@ -43,13 +46,13 @@ public class ApiService {
             return parseJsonToEmployees(response.body());
 
         } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
             throw new ApiException("Błąd komunikacji z API.", e);
         }
     }
 
     private List<Employee> parseJsonToEmployees(String jsonBody) throws ApiException {
         List<Employee> employees = new ArrayList<>();
-        Gson gson = new Gson();
 
         try {
             JsonArray users = gson.fromJson(jsonBody, JsonArray.class);

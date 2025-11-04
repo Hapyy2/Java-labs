@@ -17,6 +17,16 @@ public class Employee {
         this.salary = this.position.getSalary();
     }
 
+    public Employee(String firstName, String lastName, String email, String company, Position position, double salary) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.company = company;
+        this.position = position;
+        this.salary = salary;
+    }
+
+
     public String getFirstName() {
         return this.firstName;
     }

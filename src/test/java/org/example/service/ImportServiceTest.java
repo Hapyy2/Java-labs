@@ -8,7 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.io.TempDir;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.mockito.InjectMocks;
+import org.mockito.InjectMocks; // Ten import nie jest już używany przez 'importService'
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -28,7 +28,6 @@ class ImportServiceTest {
     @Mock
     private EmployeeService mockEmployeeService;
 
-    @InjectMocks
     private ImportService importService;
 
     @TempDir
@@ -39,6 +38,8 @@ class ImportServiceTest {
     @BeforeEach
     void setUp() throws IOException {
         csvFile = tempDir.resolve("employees.csv").toFile();
+
+        importService = new ImportService(mockEmployeeService, csvFile.getAbsolutePath());
     }
 
     @Test
@@ -50,7 +51,7 @@ class ImportServiceTest {
 
         when(mockEmployeeService.addEmployee(any())).thenReturn(true);
 
-        ImportSummary summary = importService.importFromCsv(csvFile.getAbsolutePath());
+        ImportSummary summary = importService.importFromCsv();
 
         assertAll("Sprawdzenie podsumowania udanego importu",
                 () -> assertEquals(1, summary.getImportedCount(), "Liczba zaimportowanych powinna być 1"),
@@ -71,7 +72,7 @@ class ImportServiceTest {
                 String.join(",", fname, lname, email, company, pos, salary);
         Files.write(csvFile.toPath(), content.getBytes());
 
-        ImportSummary summary = importService.importFromCsv(csvFile.getAbsolutePath());
+        ImportSummary summary = importService.importFromCsv();
 
         assertAll("Sprawdzenie podsumowania błędu importu",
                 () -> assertEquals(0, summary.getImportedCount(), "Nie powinno być zaimportowanych wierszy"),
