@@ -1,4 +1,4 @@
-package org.example.model;
+package com.techcorp.employee.model;
 
 import java.util.List;
 

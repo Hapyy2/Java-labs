@@ -1,4 +1,4 @@
-package org.example.model;
+package com.techcorp.employee.model;
 
 public class CompanyStatistics {
     private final long employeeCount;

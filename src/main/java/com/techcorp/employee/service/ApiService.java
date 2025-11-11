@@ -1,9 +1,9 @@
-package org.example.service;
+package com.techcorp.employee.service;
 
 import com.google.gson.*;
-import org.example.exception.ApiException;
-import org.example.model.Employee;
-import org.example.model.Position;
+import com.techcorp.employee.exception.ApiException;
+import com.techcorp.employee.model.Employee;
+import com.techcorp.employee.model.Position;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 

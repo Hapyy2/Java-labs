@@ -1,11 +1,12 @@
-package org.example;
+package com.techcorp.employee;
 
-import org.example.exception.ApiException;
-import org.example.model.Employee;
-import org.example.model.ImportSummary;
-import org.example.service.ApiService;
-import org.example.service.EmployeeService;
-import org.example.service.ImportService;
+import com.techcorp.employee.exception.ApiException;
+import com.techcorp.employee.exception.DuplicateEmailException;
+import com.techcorp.employee.model.Employee;
+import com.techcorp.employee.model.ImportSummary;
+import com.techcorp.employee.service.ApiService;
+import com.techcorp.employee.service.EmployeeService;
+import com.techcorp.employee.service.ImportService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -39,11 +40,16 @@ public class EmployeeManagementApplication implements CommandLineRunner {
 
     public static void main(String[] args) {
         SpringApplication.run(EmployeeManagementApplication.class, args);
+        log.info("--- APLIKACJA URUCHOMIONA ---");
+        log.info("--- API GOTOWE NA http://localhost:8080 ---");
     }
 
+    /**
+     * Ten kod wykona się przy starcie aplikacji, aby zapełnić bazę danych w pamięci.
+     */
     @Override
     public void run(String... args) throws Exception {
-        log.info("--- START APLIKACJI ---");
+        log.info("--- START IMPORTU DANYCH POCZĄTKOWYCH ---");
         int initialCount = employeeService.getAllEmployees().size();
         log.info("Początkowa liczba pracowników: {}", initialCount);
 
@@ -62,9 +68,10 @@ public class EmployeeManagementApplication implements CommandLineRunner {
         log.info("\n--- IMPORT XML BEANS ---");
         int xmlImportCount = 0;
         for (Employee emp : xmlEmployees) {
-            if (employeeService.addEmployee(emp)) {
+            try {
+                employeeService.addEmployee(emp);
                 xmlImportCount++;
-            } else {
+            } catch (DuplicateEmailException e) {
                 log.warn("Duplikat emaila z XML: {}", emp.getEmail());
             }
         }
@@ -76,10 +83,11 @@ public class EmployeeManagementApplication implements CommandLineRunner {
         try {
             List<Employee> apiEmployees = apiService.fetchEmployeesFromApi();
             int apiImportCount = 0;
-            for(Employee emp : apiEmployees) {
-                if(employeeService.addEmployee(emp)) {
+            for (Employee emp : apiEmployees) {
+                try {
+                    employeeService.addEmployee(emp);
                     apiImportCount++;
-                } else {
+                } catch (DuplicateEmailException e) {
                     log.warn("Duplikat emaila z API: {}", emp.getEmail());
                 }
             }
@@ -89,27 +97,6 @@ public class EmployeeManagementApplication implements CommandLineRunner {
             log.error("Błąd pobierania danych z API: {}", e.getMessage(), e);
         }
 
-        log.info("\n--- ANALITYKA FIRMOWA ---");
-
-        log.info("\n--- Walidacja pensji (poniżej bazowej) ---");
-        List<Employee> inconsistentSalaries = employeeService.validateSalaryConsistency();
-        if (inconsistentSalaries.isEmpty()) {
-            log.info("Wszystkie pensje są zgodne (równe lub wyższe niż bazowe).");
-        } else {
-            inconsistentSalaries.forEach(e -> log.warn(
-                    "Niespójna pensja: {} (Stanowisko: {}, Bazowa: {}, Posiada: {})",
-                    e.getFullName(), e.getPosition().getName(), e.getPosition().getSalary(), e.getSalary()
-            ));
-        }
-
-
-        log.info("\n--- Statystyki Firm ---");
-        employeeService.getCompanyStatistics()
-                .forEach((company, stats) ->
-                        log.info("Firma '{}': {}", company, stats.toString())
-                );
-
-        log.info("\n--- KONIEC DEMONSTRACJI ---");
+        log.info("\n--- IMPORT DANYCH ZAKOŃCZONY ---");
     }
 }
-

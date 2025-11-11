@@ -1,4 +1,4 @@
-package org.example.model;
+package com.techcorp.employee.model;
 
 public enum Position {
     CEO("CEO", 25000.0, 1),

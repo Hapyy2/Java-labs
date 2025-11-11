@@ -1,4 +1,4 @@
-package org.example.config;
+package com.techcorp.employee.config;
 
 import com.google.gson.Gson;
 import org.springframework.context.annotation.Bean;

@@ -1,14 +1,16 @@
-package org.example.service;
+package com.techcorp.employee.service;
 
-import org.example.exception.InvalidDataException;
-import org.example.model.Employee;
-import org.example.model.ImportSummary;
-import org.example.model.Position;
+import com.techcorp.employee.exception.DuplicateEmailException;
+import com.techcorp.employee.exception.InvalidDataException;
+import com.techcorp.employee.model.Employee;
+import com.techcorp.employee.model.ImportSummary;
+import com.techcorp.employee.model.Position;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +31,9 @@ public class ImportService {
         List<String> errors = new ArrayList<>();
         int lineNumber = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(csvFilePath))) {
+        ClassPathResource resource = new ClassPathResource(csvFilePath.replace("classpath:", ""));
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
             if (br.readLine() != null) {
                 lineNumber++;
             }
@@ -74,10 +78,10 @@ public class ImportService {
                         ));
                     }
 
-
-                    if (employeeService.addEmployee(employee)) {
+                    try {
+                        employeeService.addEmployee(employee);
                         importedCount++;
-                    } else {
+                    } catch (DuplicateEmailException e) {
                         errors.add(String.format("Linia %d: Duplikat emaila '%s'.", lineNumber, email));
                     }
 
